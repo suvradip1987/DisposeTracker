@@ -19,10 +19,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const fs = __importStar(require("fs"));
 const rl = __importStar(require("readline"));
 const { once } = require('events');
-const NonDisposedCollectedType_1 = require("./NonDisposedCollectedType");
-const CallStack_1 = require("./CallStack");
-const DummyNonDisposedCollectedType_1 = require("./DummyNonDisposedCollectedType");
-const DummyCallStack_1 = require("./DummyCallStack");
+const NonDisposedCollectedType_1 = require("./Types/NonDisposedCollectedType");
+const CallStack_1 = require("./Types/CallStack");
+const DummyNonDisposedCollectedType_1 = require("./Types/DummyNonDisposedCollectedType");
+const DummyCallStack_1 = require("./Types/DummyCallStack");
 class ReportParser {
     constructor(path) {
         this.m_filePath = path;
@@ -35,7 +35,7 @@ class ReportParser {
             try {
                 const readline = rl.createInterface({
                     //input: fs.createReadStream(this.m_filePath,{encoding: 'utf16le'}),
-                    input: fs.createReadStream('./Portal.Profiler.Summarycopy.log', { encoding: 'utf16le' }),
+                    input: fs.createReadStream('./temp/Portal.Profiler.Summarycopy.log', { encoding: 'utf16le' }),
                 });
                 readline.on('line', (line) => {
                     line = line.trim();

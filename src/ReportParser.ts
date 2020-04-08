@@ -1,12 +1,12 @@
 import * as fs from 'fs';
 import * as rl from 'readline';
 const { once } = require('events');
-import { NonDisposedCollectedType } from "./NonDisposedCollectedType";
+import { NonDisposedCollectedType } from "./Types/NonDisposedCollectedType"
 import { INonDisposedCollectedType } from "./Interfaces/INonDisposedCollectedType"
-import { CallStack } from './CallStack';
-import { DummyNonDisposedCollectedType } from './DummyNonDisposedCollectedType';
+import { CallStack } from './Types/CallStack';
+import { DummyNonDisposedCollectedType } from './Types/DummyNonDisposedCollectedType';
 import { ICallStack } from './Interfaces/ICallStack';
-import { DummyCallStack } from './DummyCallStack';
+import { DummyCallStack } from './Types/DummyCallStack';
 
 
 export class ReportParser {
@@ -26,13 +26,13 @@ export class ReportParser {
         try {
             const readline = rl.createInterface({
                 //input: fs.createReadStream(this.m_filePath,{encoding: 'utf16le'}),
-                input: fs.createReadStream('./Portal.Profiler.Summarycopy.log', { encoding: 'utf16le' }),
+                input: fs.createReadStream('./temp/Portal.Profiler.Summarycopy.log', { encoding: 'utf16le' }),
             });
 
             readline.on('line',
                 (line) => {
                     line = line.trim();
-                    if (line.length > 0) {                       
+                    if (line.length > 0) {                                             
                         this.LineHandler(line);
                     }
                 });
