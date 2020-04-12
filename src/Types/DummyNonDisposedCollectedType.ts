@@ -1,16 +1,16 @@
 import { INonDisposedCollectedType } from "../Interfaces/INonDisposedCollectedType";
-import { CallStack } from "../Types/CallStack";
+import { ICallStack } from "../Interfaces/ICallStack";
 
 export class DummyNonDisposedCollectedType implements INonDisposedCollectedType
 {
-    AddStack(callStack: CallStack): boolean {
+    AddStack(callStack: ICallStack): boolean {
         throw new Error("Method not implemented.");
     }
     get Name(): string {
         throw new Error("Method not implemented.");
     }
 
-    get CallStacks() : CallStack[]
+    get CallStacks() : ICallStack[]
     {
         throw new Error("Method not implemented.");
     }

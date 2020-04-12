@@ -1,11 +1,11 @@
-import {CallStack} from "../Types/CallStack"
 import {INonDisposedCollectedType} from "../Interfaces/INonDisposedCollectedType"
+import { ICallStack } from "../Interfaces/ICallStack";
 
 export class NonDisposedCollectedType implements INonDisposedCollectedType
 {
     private m_Name:string;
     private m_Count : Number;
-    private m_ListOfCallStacks: CallStack[];
+    private m_ListOfCallStacks: ICallStack[];
 
     get Name(): string {
         return this.m_Name;
@@ -15,7 +15,7 @@ export class NonDisposedCollectedType implements INonDisposedCollectedType
         return this.m_Count;
     }
 
-    get CallStacks() : CallStack[]
+    get CallStacks() : ICallStack[]
     {
         return this.m_ListOfCallStacks;
     }
@@ -27,7 +27,7 @@ export class NonDisposedCollectedType implements INonDisposedCollectedType
         this.m_ListOfCallStacks= [];        
     }    
 
-    AddStack(callStack: CallStack):boolean
+    AddStack(callStack: ICallStack):boolean
     {
         this.m_ListOfCallStacks.push(callStack);
         return true;

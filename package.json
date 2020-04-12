@@ -4,16 +4,17 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "prestart": "tsc",
     "start": "node dist/app.js",
-    "dev": "nodemon src/app.ts",
-    "build": "tsc -p ."
+    "predev": "tsc",
+    "dev": "ts-node src/app.ts",
+    "build": "tsc"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {},
   "devDependencies": {
     "@types/node": "^13.11.0",
-    "nodemon": "^2.0.2",
     "ts-node": "^8.8.1",
     "typescript": "^3.8.3"
   }

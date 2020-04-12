@@ -18,13 +18,14 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const fs = __importStar(require("fs"));
 const rl = __importStar(require("readline"));
-const { once } = require('events');
 const NonDisposedCollectedType_1 = require("./Types/NonDisposedCollectedType");
 const CallStack_1 = require("./Types/CallStack");
 const DummyNonDisposedCollectedType_1 = require("./Types/DummyNonDisposedCollectedType");
 const DummyCallStack_1 = require("./Types/DummyCallStack");
+const { once } = require('events');
 class ReportParser {
     constructor(path) {
+        this.m_isErrorOccurred = false;
         this.m_filePath = path;
         this.m_ListOfNonDisposedCollectedType = [];
         this.m_CurrentNonDisposedCollectedType = new DummyNonDisposedCollectedType_1.DummyNonDisposedCollectedType();
@@ -33,40 +34,60 @@ class ReportParser {
     Parse() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const readline = rl.createInterface({
+                this.m_readline = rl.createInterface({
                     //input: fs.createReadStream(this.m_filePath,{encoding: 'utf16le'}),
                     input: fs.createReadStream('./temp/Portal.Profiler.Summarycopy.log', { encoding: 'utf16le' }),
                 });
-                readline.on('line', (line) => {
-                    line = line.trim();
-                    if (line.length > 0) {
-                        this.LineHandler(line);
-                    }
+                this.m_readline.on('line', (line) => {
+                    this.ExtractLine(line);
                 });
-                yield once(readline, 'close');
-                console.log('File processed.');
-                var jsonData = JSON.stringify(this.m_ListOfNonDisposedCollectedType);
-                console.log(jsonData);
+                yield once(this.m_readline, 'close');
+                // let jsonData = JSON.stringify(this.m_ListOfNonDisposedCollectedType);
+                // let listofCollectedItems = JSON.parse(jsonData);          
+                let isSuccessful = !this.m_isErrorOccurred;
+                if (isSuccessful) {
+                    console.log('File Processing Successful');
+                }
+                else {
+                    console.log('File Processing Failed');
+                }
+                return isSuccessful;
             }
             catch (error) {
                 console.error(error);
+                return false;
             }
         });
     }
-    LineHandler(line) {
-        if (line.startsWith('Collected disposables')) {
-            var collectedDisposableObject = line.substring(line.lastIndexOf("('") + 2, line.lastIndexOf("')"));
-            var total = Number.parseInt(line.substring(line.lastIndexOf("(") + 1, line.lastIndexOf(")")));
-            this.m_CurrentNonDisposedCollectedType = new NonDisposedCollectedType_1.NonDisposedCollectedType(collectedDisposableObject, total);
-            this.m_ListOfNonDisposedCollectedType.push(this.m_CurrentNonDisposedCollectedType);
-        }
-        else if (line.startsWith('- hit(')) {
-            var count = Number.parseInt(line.substring(line.indexOf("(") + 1, line.indexOf(")")));
-            this.m_CurrentCallStack = new CallStack_1.CallStack(count);
-            this.m_CurrentNonDisposedCollectedType.AddStack(this.m_CurrentCallStack);
-        }
-        else {
-            this.m_CurrentCallStack.AddStackFrames(line);
+    ExtractLine(line) {
+        var _a, _b;
+        line = line.trim();
+        if (line.length > 0) {
+            try {
+                if (line.startsWith('Collected disposables')) {
+                    var collectedDisposableObject = line.substring(line.lastIndexOf("('") + 2, line.lastIndexOf("')"));
+                    var total = Number.parseInt(line.substring(line.lastIndexOf("(") + 1, line.lastIndexOf(")")));
+                    debugger;
+                    this.m_CurrentNonDisposedCollectedType = new NonDisposedCollectedType_1.NonDisposedCollectedType(collectedDisposableObject, total);
+                    this.m_ListOfNonDisposedCollectedType.push(this.m_CurrentNonDisposedCollectedType);
+                }
+                else if (line.startsWith('- hit(')) {
+                    var count = Number.parseInt(line.substring(line.indexOf("(") + 1, line.indexOf(")")));
+                    this.m_CurrentCallStack = new CallStack_1.CallStack(count);
+                    this.m_CurrentNonDisposedCollectedType.AddStack(this.m_CurrentCallStack);
+                }
+                else {
+                    this.m_CurrentCallStack.AddStackFrames(line);
+                }
+                throw new Error();
+            }
+            catch (error) {
+                console.log(error);
+                this.m_isErrorOccurred = true;
+                // below line will ensure readline.close event will fire. 
+                (_a = this.m_readline) === null || _a === void 0 ? void 0 : _a.close();
+                (_b = this.m_readline) === null || _b === void 0 ? void 0 : _b.removeAllListeners();
+            }
         }
     }
     PrintItem() {
