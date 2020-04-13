@@ -1,12 +1,12 @@
 import * as fs from 'fs';
 import * as rl from 'readline';
-import { NonDisposedCollectedType } from "./Types/NonDisposedCollectedType"
-import { INonDisposedCollectedType } from "./Interfaces/INonDisposedCollectedType"
+import * as EventEmitter from 'events';
+import { NonDisposedCollectedType } from "./Types/NonDisposedCollectedType";
+import { INonDisposedCollectedType } from "./Interfaces/INonDisposedCollectedType";
 import { CallStack } from './Types/CallStack';
 import { DummyNonDisposedCollectedType } from './Types/DummyNonDisposedCollectedType';
 import { ICallStack } from './Interfaces/ICallStack';
 import { DummyCallStack } from './Types/DummyCallStack';
-const { once } = require('events');
 
 export class ReportParser {
     m_filePath: string;
@@ -27,6 +27,7 @@ export class ReportParser {
         try {
             if (!fs.existsSync(this.m_filePath)) {
                 //throw new Error('File path doesot exist:' + this.m_filePath);
+                console.log('File does not exist. File path:'+ this.m_filePath);
             }
 
             this.m_readline = rl.createInterface({
@@ -40,17 +41,10 @@ export class ReportParser {
                 }
             );
 
-            await once(this.m_readline, 'close');
+            await EventEmitter.once(this.m_readline, 'close');
             // let jsonData = JSON.stringify(this.m_ListOfNonDisposedCollectedType);
-            // let listofCollectedItems = JSON.parse(jsonData);          
-            let isSuccessful = !this.m_isErrorOccurred;
-            if (isSuccessful) {
-                console.log('File Processing Successful')
-            }
-            else {
-                console.log('File Processing Failed')
-            }
-            return isSuccessful;
+            // let listofCollectedItems = JSON.parse(jsonData);                    
+            return !this.m_isErrorOccurred;
         }
         catch (error) {
             console.error(error);
@@ -85,12 +79,11 @@ export class ReportParser {
                 else {
                     this.m_CurrentCallStack.AddStackFrames(currentLine);
                 }
-                throw new Error();
             }
             catch (error) {
                 console.log(error);
                 this.m_isErrorOccurred = true;
-                // below line will ensure readline.close event will fire. 
+                // this will ensure readline.close event will fire. 
                 this.m_readline?.close();
                 //this will ensure in case of error further readline.line events will not fire. 
                 this.m_readline?.removeAllListeners();

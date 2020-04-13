@@ -4,7 +4,7 @@ const ReportParser_1 = require("./ReportParser");
 class App {
     constructor(filePath) {
         let p = new ReportParser_1.ReportParser(filePath);
-        p.Parse().then((value) => console.log(value));
+        p.Parse().then((value) => console.log('Is Processing Succesful: ' + value));
     }
 }
 var app = new App("test");
