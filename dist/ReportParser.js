@@ -18,12 +18,11 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const fs = __importStar(require("fs"));
 const rl = __importStar(require("readline"));
+const EventEmitter = __importStar(require("events"));
 const NonDisposedCollectedType_1 = require("./Types/NonDisposedCollectedType");
 const CallStack_1 = require("./Types/CallStack");
 const DummyNonDisposedCollectedType_1 = require("./Types/DummyNonDisposedCollectedType");
 const DummyCallStack_1 = require("./Types/DummyCallStack");
-//const {once} = require('events');
-const EventEmitter = __importStar(require("events"));
 class ReportParser {
     constructor(path) {
         this.m_isErrorOccurred = false;
@@ -47,15 +46,16 @@ class ReportParser {
                     this.ExtractLine(line);
                 });
                 yield EventEmitter.once(this.m_readline, 'close');
-                console.log(JSON.stringify(this.m_ListOfNonDisposedCollectedType));
                 // let jsonData = JSON.stringify(this.m_ListOfNonDisposedCollectedType);
                 // let listofCollectedItems = JSON.parse(jsonData);                    
-                return !this.m_isErrorOccurred;
+                //return !this.m_isErrorOccurred;
             }
             catch (error) {
                 console.error(error);
-                return false;
+                //return false;
+                return '';
             }
+            return JSON.stringify(this.m_ListOfNonDisposedCollectedType);
         });
     }
     ExtractLine(currentLine) {
@@ -91,17 +91,6 @@ class ReportParser {
     PrintItem() {
         this.m_ListOfNonDisposedCollectedType.forEach(element => {
             console.log(element.Name + ':' + element.Count);
-        });
-    }
-    TimepassWork() {
-        return new Promise((resolve, reject) => {
-            var c = this.PrintItem();
-            if (c instanceof CallStack_1.CallStack) {
-                resolve();
-            }
-            else {
-                reject();
-            }
         });
     }
 }

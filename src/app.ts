@@ -1,9 +1,21 @@
-import { ReportParser } from "./ReportParser"
+import * as path from 'path';
+import { ReportParser } from "./ReportParser";
+import express = require('express');
 
-class App {
-    constructor(filePath: string) {
-        let p = new ReportParser(filePath);
-        p.Parse().then((value) => console.log('Is Processing Succesful: '+ value));        
+console.log(__dirname);
+console.log(__filename);
+
+//var app = new App("test");
+const app: express.Application = express();
+
+app.get('', (req, res) => {
+    var parser = new ReportParser('');
+    parser.Parse().then((value) => {
+        res.send(value);
     }
-}
-var app = new App("test");
+    );    
+});
+
+app.listen('3000', () => {
+    console.log('Server is up on Port 3000');
+})

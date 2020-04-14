@@ -23,7 +23,7 @@ export class ReportParser {
         this.m_CurrentCallStack = new DummyCallStack();
     }
 
-    async Parse(): Promise<boolean> {
+    async Parse(): Promise<string> {
         try {
             if (!fs.existsSync(this.m_filePath)) {
                 //throw new Error('File path doesot exist:' + this.m_filePath);
@@ -44,12 +44,14 @@ export class ReportParser {
             await EventEmitter.once(this.m_readline, 'close');
             // let jsonData = JSON.stringify(this.m_ListOfNonDisposedCollectedType);
             // let listofCollectedItems = JSON.parse(jsonData);                    
-            return !this.m_isErrorOccurred;
+            //return !this.m_isErrorOccurred;
         }
         catch (error) {
             console.error(error);
-            return false;
+            //return false;
+            return '';            
         }
+        return JSON.stringify(this.m_ListOfNonDisposedCollectedType);
     }
 
     private ExtractLine(currentLine: string) {
