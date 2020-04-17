@@ -5,14 +5,15 @@
   "main": "index.js",
   "scripts": {
     "prestart": "tsc",
-    "start": "node dist/app.js",
+    "start": "node dist/Server.js",
     "predev": "tsc",
-    "dev": "ts-node src/app.ts",
+    "dev": "ts-node src/Server.ts",
     "build": "tsc"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.17.1"
   },
   "devDependencies": {
