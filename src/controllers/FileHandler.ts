@@ -10,17 +10,17 @@ export class FileHandler {
         return this.m_router;
     }
 
-    constructor() {        
-        this.m_router = express.Router();                              
-        this.m_router.post('/file',FileHandlerMiddleware.Configure(), (req, res) => {
-            this.HandleInputFile(req, res);           
+    constructor() {
+        this.m_router = express.Router();
+        this.m_router.post('/file', FileHandlerMiddleware.Configure(), (req, res,next) => {
+            this.HandleInputFile(req, res,next);
         });
-    }   
+    }
 
-    private HandleInputFile(req: any, res: any) {          
+    private HandleInputFile(req: any, res: any,next :any) {
         var parser = new ReportParser(req.file.originalname);
         parser.Parse().then((value) => {
             res.send(value);
-        });
+        })
     }
 }

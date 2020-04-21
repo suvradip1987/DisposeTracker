@@ -7,6 +7,7 @@ import { CallStack } from './Types/CallStack';
 import { DummyNonDisposedCollectedType } from './Types/DummyNonDisposedCollectedType';
 import { ICallStack } from './Interfaces/ICallStack';
 import { DummyCallStack } from './Types/DummyCallStack';
+import { json } from 'express';
 
 export class ReportParser {
     m_fileName: string;
@@ -15,6 +16,7 @@ export class ReportParser {
     m_CurrentCallStack: ICallStack;
     m_isErrorOccurred: boolean = false;
     m_readline: rl.Interface | undefined;
+    m_FailedResponseObject={ "error": "Parsing Failed" };
 
     constructor(name: string) {
         this.m_fileName = name;
@@ -24,10 +26,10 @@ export class ReportParser {
     }
 
     async Parse(): Promise<string> {
-        try {            
+        try {
             this.m_readline = rl.createInterface({
                 //input: fs.createReadStream(this.m_filePath,{encoding: 'utf16le'}),
-                input: fs.createReadStream('./temp/'+this.m_fileName, { encoding: 'utf16le' }),
+                input: fs.createReadStream('./temp/' + this.m_fileName, { encoding: 'utf16le' }),
             });
 
             this.m_readline.on('line',
@@ -36,16 +38,18 @@ export class ReportParser {
                 }
             );
 
-            await EventEmitter.once(this.m_readline, 'close');
-            // let jsonData = JSON.stringify(this.m_ListOfNonDisposedCollectedType);
-            // let listofCollectedItems = JSON.parse(jsonData);                    
-            //return !this.m_isErrorOccurred;
+            await EventEmitter.once(this.m_readline, 'close');            
         }
         catch (error) {
             console.error(error);
-            //return false;
-            return '';            
+            return JSON.stringify(this.m_FailedResponseObject);
         }
+
+        if(this.m_isErrorOccurred)
+        {
+            return JSON.stringify(this.m_FailedResponseObject);
+        }
+        
         return JSON.stringify(this.m_ListOfNonDisposedCollectedType);
     }
 
