@@ -1,14 +1,41 @@
 import express = require('express');
 import { Router } from './Router';
-const cors= require('cors');
+const cors = require('cors');
 
-const app: express.Application = express();
+class Server {
 
-app.use(cors());
+    m_app: express.Application;
 
-var router = new Router(app);
-router.Load();
+    constructor() {
+        this.m_app = express();
+        this.InitializeMiddleware();
+    }    
 
-app.listen('3000', () => {
-    console.log('Server is up on Port 3000');
-})
+    private InitializeMiddleware() {
+        this.m_app.use(cors());
+        this.InitializeRouter();
+        this.InitializeErrorHandlingMiddleware();
+    }
+
+    private InitializeErrorHandlingMiddleware() {
+        this.m_app.use(function (err: any, req: any, res: any, next: express.NextFunction) {
+            console.error(err.stack);            
+            res.status(400).send({"error":err.message});
+        });
+    }
+
+    private InitializeRouter() {
+        var router = new Router(this.m_app);
+        router.Load();
+    }
+
+    public StartServer() {
+        this.m_app.listen('3000', () => {
+            console.log('Server is up on Port 3000');
+        })
+    }
+}
+
+var server = new Server();
+server.StartServer();
+

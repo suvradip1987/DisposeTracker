@@ -3,20 +3,18 @@ import { FileHandler } from './controllers/FileHandler';
 
 export class Router {
 
-    m_app:express.Application;    
+    m_app: express.Application;
 
-    constructor(app :express.Application) {
-        this.m_app=app;        
+    constructor(app: express.Application) {
+        this.m_app = app;
     }
 
-    Load() : void
-    {        
-        this.AddFileRouter();
-    }          
-
-
-    private AddFileRouter() {
+    Load(): void {
         var filehandler = new FileHandler();
-        this.m_app.use('/File', filehandler.value);
+        this.AddRouter(filehandler);
+    }
+
+    private AddRouter(filehandler: FileHandler) {
+        this.m_app.use('/api', filehandler.value);
     }
 }

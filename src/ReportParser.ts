@@ -9,30 +9,25 @@ import { ICallStack } from './Interfaces/ICallStack';
 import { DummyCallStack } from './Types/DummyCallStack';
 
 export class ReportParser {
-    m_filePath: string;
+    m_fileName: string;
     m_ListOfNonDisposedCollectedType: INonDisposedCollectedType[];
     m_CurrentNonDisposedCollectedType: INonDisposedCollectedType;
     m_CurrentCallStack: ICallStack;
     m_isErrorOccurred: boolean = false;
     m_readline: rl.Interface | undefined;
 
-    constructor(path: string) {
-        this.m_filePath = path;
+    constructor(name: string) {
+        this.m_fileName = name;
         this.m_ListOfNonDisposedCollectedType = [];
         this.m_CurrentNonDisposedCollectedType = new DummyNonDisposedCollectedType();
         this.m_CurrentCallStack = new DummyCallStack();
     }
 
     async Parse(): Promise<string> {
-        try {
-            if (!fs.existsSync(this.m_filePath)) {
-                //throw new Error('File path doesot exist:' + this.m_filePath);
-                console.log('File does not exist. File path:'+ this.m_filePath);
-            }
-
+        try {            
             this.m_readline = rl.createInterface({
                 //input: fs.createReadStream(this.m_filePath,{encoding: 'utf16le'}),
-                input: fs.createReadStream('./temp/Portal.Profiler.Summarycopy.log', { encoding: 'utf16le' }),
+                input: fs.createReadStream('./temp/'+this.m_fileName, { encoding: 'utf16le' }),
             });
 
             this.m_readline.on('line',
