@@ -1,8 +1,8 @@
 import multer = require('multer');
 
-export class MulterHelper {
+export class FileHandlerMiddleware {
 
-    public static CreateAndConfigureMulter() {
+    public static Configure() {
         var customStorage = this.CreateCustomStorage()
         return multer({
             storage: customStorage,
@@ -10,22 +10,22 @@ export class MulterHelper {
                 // 50 Mb is currently the max size
                 fileSize: 52428800
             },
-            fileFilter(req, file: Express.Multer.File, callback: multer.FileFilterCallback) {
+            fileFilter(req,file: Express.Multer.File, callback: multer.FileFilterCallback) {
                 if (!file.originalname.endsWith('.log')) {
                     return callback(new Error('Please upload Portal Profiler log.'))
                 }
                 callback(null, true);
             }
-        });
+        }).single('file');       
     }
 
     private static CreateCustomStorage() {
         return multer.diskStorage({
-            destination: function (req, file, cb) {
+            destination: function (req, file, cb) {               
                 cb(null, './temp');
             },
-            filename: function (req, file, cb) {
-                cb(null, file.originalname);
+            filename: function (req, file, cb) {                                          
+                cb(null, file.originalname);                
             }
         });
     }
