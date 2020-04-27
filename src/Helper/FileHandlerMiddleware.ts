@@ -10,7 +10,7 @@ export class FileHandlerMiddleware {
                 // 50 Mb is currently the max size
                 fileSize: 52428800
             },
-            fileFilter(req,file: Express.Multer.File, callback: multer.FileFilterCallback) {
+            fileFilter(req :Express.Request, file: Express.Multer.File, callback: multer.FileFilterCallback) {
                 if (!file.originalname.endsWith('.log')) {
                     return callback(new Error('Please upload Portal Profiler log.'))
                 }

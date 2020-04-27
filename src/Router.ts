@@ -1,5 +1,5 @@
 import * as express from 'express';
-import { FileHandler } from './controllers/FileHandler';
+import { FileHandler } from './api/FileHandler';
 
 export class Router {
 

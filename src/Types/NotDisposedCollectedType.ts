@@ -1,7 +1,7 @@
 import {INonDisposedCollectedType} from "../Interfaces/INonDisposedCollectedType"
 import { ICallStack } from "../Interfaces/ICallStack";
 
-export class NonDisposedCollectedType implements INonDisposedCollectedType
+export class NotDisposedCollectedType implements INonDisposedCollectedType
 {
     private m_Name:string;
     private m_Count : Number;
@@ -22,7 +22,7 @@ export class NonDisposedCollectedType implements INonDisposedCollectedType
     
     constructor(name : string,count :Number)
     {
-        this.m_Name=name;
+        this.m_Name=name; 
         this.m_Count=count;
         this.m_ListOfCallStacks= [];        
     }    

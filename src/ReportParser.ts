@@ -1,13 +1,12 @@
 import * as fs from 'fs';
 import * as rl from 'readline';
 import * as EventEmitter from 'events';
-import { NonDisposedCollectedType } from "./Types/NonDisposedCollectedType";
+import { NotDisposedCollectedType } from "./Types/NotDisposedCollectedType";
 import { INonDisposedCollectedType } from "./Interfaces/INonDisposedCollectedType";
 import { CallStack } from './Types/CallStack';
 import { DummyNonDisposedCollectedType } from './Types/DummyNonDisposedCollectedType';
 import { ICallStack } from './Interfaces/ICallStack';
 import { DummyCallStack } from './Types/DummyCallStack';
-import { json } from 'express';
 
 export class ReportParser {
     m_fileName: string;
@@ -16,7 +15,7 @@ export class ReportParser {
     m_CurrentCallStack: ICallStack;
     m_isErrorOccurred: boolean = false;
     m_readline: rl.Interface | undefined;
-    m_FailedResponseObject={ "error": "Parsing Failed" };
+    m_FailedResponse = "Parsing Failed";
 
     constructor(name: string) {
         this.m_fileName = name;
@@ -28,7 +27,6 @@ export class ReportParser {
     async Parse(): Promise<string> {
         try {
             this.m_readline = rl.createInterface({
-                //input: fs.createReadStream(this.m_filePath,{encoding: 'utf16le'}),
                 input: fs.createReadStream('./temp/' + this.m_fileName, { encoding: 'utf16le' }),
             });
 
@@ -38,18 +36,17 @@ export class ReportParser {
                 }
             );
 
-            await EventEmitter.once(this.m_readline, 'close');            
+            await EventEmitter.once(this.m_readline, 'close');
+
+            if (this.m_isErrorOccurred) {
+                throw new Error(this.m_FailedResponse);
+            }
         }
         catch (error) {
-            console.error(error);
-            return JSON.stringify(this.m_FailedResponseObject);
+            console.log(error);
+            throw new Error(this.m_FailedResponse);
         }
 
-        if(this.m_isErrorOccurred)
-        {
-            return JSON.stringify(this.m_FailedResponseObject);
-        }
-        
         return JSON.stringify(this.m_ListOfNonDisposedCollectedType);
     }
 
@@ -66,7 +63,7 @@ export class ReportParser {
                         currentLine.lastIndexOf("(") + 1,
                         currentLine.lastIndexOf(")"))
                     );
-                    this.m_CurrentNonDisposedCollectedType = new NonDisposedCollectedType(collectedDisposableObject, total);
+                    this.m_CurrentNonDisposedCollectedType = new NotDisposedCollectedType(collectedDisposableObject, total);
                     this.m_ListOfNonDisposedCollectedType.push(this.m_CurrentNonDisposedCollectedType);
                 }
                 else if (currentLine.startsWith('- hit(')) {

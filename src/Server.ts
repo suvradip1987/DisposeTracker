@@ -30,8 +30,9 @@ class Server {
     }
 
     public StartServer() {
-        this.m_app.listen('3000', () => {
-            console.log('Server is up on Port 3000');
+        const port = process.env.PORT || 8080;
+        this.m_app.listen(port, () => {
+            console.log('Server is up on Port '+port);
         })
     }
 }
