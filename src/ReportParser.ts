@@ -14,7 +14,7 @@ export class ReportParser {
     m_CurrentNonDisposedCollectedType: INonDisposedCollectedType;
     m_CurrentCallStack: ICallStack;
     m_isErrorOccurred: boolean = false;
-    m_readline: rl.Interface | undefined;
+    mReadline: rl.Interface = {} as any;
     m_FailedResponse = "Parsing Failed";
 
     constructor(name: string) {
@@ -26,17 +26,17 @@ export class ReportParser {
 
     async Parse(): Promise<string> {
         try {
-            this.m_readline = rl.createInterface({
+            this.mReadline = rl.createInterface({
                 input: fs.createReadStream('./temp/' + this.m_fileName, { encoding: 'utf16le' }),
             });
 
-            this.m_readline.on('line',
+            this.mReadline.on('line',
                 (line) => {
                     this.ExtractLine(line)
                 }
             );
 
-            await EventEmitter.once(this.m_readline, 'close');
+            await EventEmitter.once(this.mReadline, 'close');
 
             if (this.m_isErrorOccurred) {
                 throw new Error(this.m_FailedResponse);
@@ -82,9 +82,9 @@ export class ReportParser {
                 console.log(error);
                 this.m_isErrorOccurred = true;
                 // this will ensure readline.close event will fire. 
-                this.m_readline?.close();
+                this.mReadline.close();
                 //this will ensure in case of error further readline.line events will not fire. 
-                this.m_readline?.removeAllListeners();
+                this.mReadline.removeAllListeners();
             }
         }
     }
