@@ -1,3 +1,9 @@
 node_modules/
 temp/
 dist/
+obj/
+.vs/
+bin/
+ReportParserService/
+ReportParserService.njsproj
+ReportParserService.sln

@@ -1,12 +1,12 @@
 import * as fs from 'fs';
 import * as rl from 'readline';
 import * as EventEmitter from 'events';
-import { NotDisposedCollectedType } from "./Types/NotDisposedCollectedType";
-import { INonDisposedCollectedType } from "./Interfaces/INonDisposedCollectedType";
-import { CallStack } from './Types/CallStack';
-import { DummyNonDisposedCollectedType } from './Types/DummyNonDisposedCollectedType';
-import { ICallStack } from './Interfaces/ICallStack';
-import { DummyCallStack } from './Types/DummyCallStack';
+import { NotDisposedCollectedType } from "../Types/NotDisposedCollectedType";
+import { INonDisposedCollectedType } from "../Interfaces/INonDisposedCollectedType";
+import { CallStack } from '../Types/CallStack';
+import { DummyNonDisposedCollectedType } from '../Types/DummyNonDisposedCollectedType';
+import { ICallStack } from '../Interfaces/ICallStack';
+import { DummyCallStack } from '../Types/DummyCallStack';
 
 export class ReportParser {
     m_fileName: string;

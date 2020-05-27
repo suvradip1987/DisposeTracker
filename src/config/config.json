@@ -1,0 +1,10 @@
+﻿{
+  "ProdDb": {
+    "username": "root",
+    "password": "foot"
+  },
+  "TestDb": {
+    "username": "root",
+    "password": "foot"
+  }
+}

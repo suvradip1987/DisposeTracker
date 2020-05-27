@@ -3,7 +3,7 @@ import multer = require('multer');
 export class FileHandlerMiddleware {
 
     public static Configure() {
-        var customStorage = this.CreateCustomStorage()
+        var customStorage = this.CreateCustomStorage();
         return multer({
             storage: customStorage,
             limits: {
@@ -12,7 +12,7 @@ export class FileHandlerMiddleware {
             },
             fileFilter(req :Express.Request, file: Express.Multer.File, callback: multer.FileFilterCallback) {
                 if (!file.originalname.endsWith('.log')) {
-                    return callback(new Error('Please upload Portal Profiler log.'))
+                    return callback(new Error('Please upload Portal Profiler log.'));
                 }
                 callback(null, true);
             }
