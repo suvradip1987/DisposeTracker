@@ -1,15 +1,15 @@
 import * as fs from 'fs';
 import * as rl from 'readline';
 import * as EventEmitter from 'events';
-import { NotDisposedCollectedType } from "../Types/NotDisposedCollectedType";
-import { INonDisposedCollectedType } from "../Interfaces/INonDisposedCollectedType";
-import { CallStack } from '../Types/CallStack';
-import { DummyNonDisposedCollectedType } from '../Types/DummyNonDisposedCollectedType';
-import { ICallStack } from '../Interfaces/ICallStack';
-import { DummyCallStack } from '../Types/DummyCallStack';
+import { NotDisposedCollectedType } from "./Types/NotDisposedCollectedType";
+import { INonDisposedCollectedType } from "./Interfaces/INonDisposedCollectedType";
+import { CallStack } from './Types/CallStack';
+import { DummyNonDisposedCollectedType } from './Types/DummyNonDisposedCollectedType';
+import { ICallStack } from './Interfaces/ICallStack';
+import { DummyCallStack } from './Types/DummyCallStack';
 
-export class ReportParser {
-    m_fileName: string;
+export class ReportGenerator {
+    m_filePath: string;
     m_ListOfNonDisposedCollectedType: INonDisposedCollectedType[];
     m_CurrentNonDisposedCollectedType: INonDisposedCollectedType;
     m_CurrentCallStack: ICallStack;
@@ -17,17 +17,17 @@ export class ReportParser {
     mReadline: rl.Interface = {} as any;
     m_FailedResponse = "Parsing Failed";
 
-    constructor(name: string) {
-        this.m_fileName = name;
+    constructor(filePath: string) {
+        this.m_filePath = filePath;
         this.m_ListOfNonDisposedCollectedType = [];
         this.m_CurrentNonDisposedCollectedType = new DummyNonDisposedCollectedType();
         this.m_CurrentCallStack = new DummyCallStack();
     }
 
-    async Parse(): Promise<string> {
-        try {
-            this.mReadline = rl.createInterface({
-                input: fs.createReadStream('./temp/' + this.m_fileName, { encoding: 'utf16le' }),
+    async GenerateReport(): Promise<string> {
+        try {            
+            this.mReadline = rl.createInterface({               
+                input: fs.createReadStream(this.m_filePath, { encoding: 'utf16le' })
             });
 
             this.mReadline.on('line',
@@ -46,7 +46,8 @@ export class ReportParser {
             console.log(error);
             throw new Error(this.m_FailedResponse);
         }
-
+        
+           
         return JSON.stringify(this.m_ListOfNonDisposedCollectedType);
     }
 
@@ -95,3 +96,4 @@ export class ReportParser {
         });
     }
 }
+

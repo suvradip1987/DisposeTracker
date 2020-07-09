@@ -1,6 +1,7 @@
 import express = require('express');
 import { Router } from './Router';
 const cors = require('cors');
+var bodyParser = require('body-parser');
 
 class Server {
 
@@ -13,6 +14,7 @@ class Server {
 
     private InitializeMiddleware() {
         this.m_app.use(cors());
+        this.m_app.use(bodyParser.urlencoded({ extended: true }));
         this.InitializeRouter();
         this.InitializeErrorHandlingMiddleware();
     }

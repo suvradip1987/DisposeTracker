@@ -1,20 +1,26 @@
 import * as express from 'express';
-import { FileHandler } from './api/FileHandler';
+import { FileProcessorAPI } from './api/FileProcessorAPI';
+import { GetReportAPI } from './api/GetReportAPI';
+import { GetUserReportsAPI } from './api/GetUserReportsAPI';
 
 export class Router {
 
     m_app: express.Application;
 
     constructor(app: express.Application) {
-        this.m_app = app;
+        this.m_app = app;     
     }
 
     Load(): void {
-        var filehandler = new FileHandler();
-        this.AddRouter(filehandler);
+        var fileProcessor = new FileProcessorAPI();
+        this.AddRouter(fileProcessor);
+        var getReport = new GetReportAPI();
+        this.AddRouter(getReport);
+        var getUserReports = new GetUserReportsAPI();
+        this.AddRouter(getUserReports);
     }
 
-    private AddRouter(filehandler: FileHandler) {
-        this.m_app.use('/api', filehandler.value);
+    private AddRouter(router: any) {
+        this.m_app.use('/api', router.value);
     }
 }

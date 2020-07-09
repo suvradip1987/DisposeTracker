@@ -1,4 +1,4 @@
-import { ICallStack } from "../Interfaces/ICallStack"
+import { ICallStack } from "./ICallStack"
 
 export interface INonDisposedCollectedType
 {

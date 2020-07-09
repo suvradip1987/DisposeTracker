@@ -1,5 +1,5 @@
 import {INonDisposedCollectedType} from "../Interfaces/INonDisposedCollectedType"
-import { ICallStack } from "../Interfaces/ICallStack";
+import { ICallStack } from "../Interfaces/ICallStack"
 
 export class NotDisposedCollectedType implements INonDisposedCollectedType
 {
