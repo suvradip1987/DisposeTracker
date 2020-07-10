@@ -18,9 +18,9 @@ export class FileProcessorAPI {
 
     private async SubmitRequestInDbAndSubmitProcessRequest(req: express.Request, res: express.Response, next: any) {
         try {            
-            var filePath= './temp/' + req.file.originalname;
+            var filePath= './temp/' + req.file.originalname;         
             var rq = new DataAccess();
-            var reqNubr = await rq.SubmitRequest('suvradip@yahoo.co.in','test',filePath);  
+            var reqNubr = await rq.SubmitRequest(req.body.user,req.body.description,filePath);  
             var childProcessCreator= new ChildProcessCreator();          
             childProcessCreator.CreateAndExecuteChildProcess(reqNubr,filePath);          
             res.send(reqNubr);

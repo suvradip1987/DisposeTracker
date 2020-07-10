@@ -13,7 +13,7 @@ export class ReportProcessor {
 
     async CreateAndSaveReport() {
         try {
-            let parsedReport = await this.CreateReport();
+            let parsedReport = await this.GenerateReport();
             await this.SaveReportToDB(parsedReport);                                    
         }
         catch (error) {
@@ -21,8 +21,7 @@ export class ReportProcessor {
         }
     }    
 
-
-    private async CreateReport() {
+    private async GenerateReport() {
         try {
             var reportGenerator = new ReportGenerator(this.m_filePath);
             const result = await reportGenerator.GenerateReport();
